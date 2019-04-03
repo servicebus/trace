@@ -1,49 +1,48 @@
 /*jslint node: true */
-'use strict';
+'use strict'
 
-const should = require('should');
+const should = require('should')
 
-let trace = require('../');
+let trace = require('../')
 
 describe('servicebus-trace', () => {
-
-  it('should persist service name, cid (or otherwise specified field), and message arrival datetime to redis', (done) => {
-
+  it('should persist service name, cid (or otherwise specified field), and message arrival datetime to redis', done => {
     var store = new trace.RedisStore({
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT
-    });
+    })
 
     let options = {
       serviceName: 'test-service',
       store: store
-    };
+    }
 
-    var bus = require('servicebus').bus();
-    bus.use(trace(options));
+    var bus = require('servicebus').bus()
+    bus.use(trace(options))
 
-    let queueName = 'my.queue';
+    let queueName = 'my.queue'
     let message = {
       cid: 'unique-cid',
       data: {},
       datetime: new Date()
-    };
+    }
 
     bus.listen('test.queue', function (msg) {
-
-      require('../bin/trace');
+      require('../bin/trace')
 
       setTimeout(function () {
-        store.clear();
+        store.clear()
 
-        store.close();
+        store.close()
 
-        done();
-      }, 500);
-    });
+        done()
+      }, 500)
+    })
 
-    bus.send('test.queue', { my: 'data'}, { type: 'bla', correlationId: bus.correlationId() });
-
-  });
-
-});
+    bus.send(
+      'test.queue',
+      { my: 'data' },
+      { type: 'bla', correlationId: bus.correlationId() }
+    )
+  })
+})

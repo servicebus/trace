@@ -1,23 +1,22 @@
 #!/usr/bin/env node
 
 /*jslint node: true */
-'use strict';
+'use strict'
 
-const colors = require('colors/safe');
-const Table = require('cli-table3');
-const trace = require('../');
-const util = require('util');
+const colors = require('colors/safe')
+const Table = require('cli-table3')
+const trace = require('../')
+const util = require('util')
 
 const store = new trace.RedisStore({
   host: process.env.REDIS_HOST || 'localhost',
   port: process.env.REDIS_PORT || 6379
-});
+})
 
-const fmt = '%s\t\t%s\t\t%s\t\t%s\t\t%s';
+const fmt = '%s\t\t%s\t\t%s\t\t%s\t\t%s'
 
 store.list(0, -1, function (err, result) {
-
-  store.close();
+  store.close()
 
   var table = new Table({
     head: [
@@ -30,30 +29,33 @@ store.list(0, -1, function (err, result) {
       colors.green('date')
     ],
     colWidths: [8, 35, 30, 30, 30, 11, 42]
-  });
+  })
 
-  let i = 0;
+  let i = 0
 
-  result.reverse().forEach((r) => {
+  result.reverse().forEach(r => {
+    i++
 
-    i++;
+    let tokens = r.split(':')
+    let date = new Date(tokens[0] * 1000)
+    let cid = tokens[1]
+    let serviceName = tokens[2]
+    let queueName = tokens[3]
+    let type = tokens[4]
+    let direction = tokens[5]
 
-    let tokens = r.split(':');
-    let date = new Date(tokens[0] * 1000);
-    let cid = tokens[1];
-    let serviceName = tokens[2];
-    let queueName = tokens[3];
-    let type = tokens[4];
-    let direction = tokens[5];
-
-    if (process.env.SERVICEBUS_TRACE_IGNORE && process.env.SERVICEBUS_TRACE_IGNORE.split(',').some((key) => {
-      return (queueName || serviceName).match(key);
-    })) return;
+    if (
+      process.env.SERVICEBUS_TRACE_IGNORE &&
+      process.env.SERVICEBUS_TRACE_IGNORE.split(',').some(key => {
+        return (queueName || serviceName).match(key)
+      })
+    )
+      return
 
     var map = {
       in: 'inbound',
       out: 'outbound'
-    };
+    }
 
     table.push([
       i,
@@ -63,10 +65,8 @@ store.list(0, -1, function (err, result) {
       type,
       map[direction],
       date.toString()
-    ]);
+    ])
+  })
 
-  });
-
-  console.log(table.toString());
-
-});
+  console.log(table.toString())
+})

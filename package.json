@@ -9,6 +9,10 @@
   "bin": {
     "servicebus-trace": "./bin/trace.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/servicebus/trace.git"
+  },
   "keywords": [
     "servicesbus",
     "distributed",

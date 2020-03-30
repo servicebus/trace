@@ -29,7 +29,7 @@
     "should": "^13.2.3"
   },
   "dependencies": {
-    "cli-table3": "^0.5.1",
+    "cli-table3": "^0.6.0",
     "colors.js": "^1.2.4",
     "debug": "^4.1.1",
     "lodash.get": "^4.4.2",

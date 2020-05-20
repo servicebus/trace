@@ -24,9 +24,9 @@
   "author": "mattwalters5@gmail.com",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^7.1.2",
-    "servicebus": "^2.3.3",
-    "should": "^13.2.3"
+    "mocha": "7.1.2",
+    "servicebus": "2.3.3",
+    "should": "13.2.3"
   },
   "dependencies": {
     "cli-table3": "^0.6.0",
